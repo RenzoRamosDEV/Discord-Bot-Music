@@ -10,13 +10,9 @@ import net.dv8tion.jda.api.entities.channel.middleman.AudioChannel;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.commands.OptionMapping;
 
-/**
- * /play command - Play music from URL or search query
- */
 public class PlayCommand {
 
     public static void execute(SlashCommandInteractionEvent event) {
-        // Defer reply to avoid timeout (loading tracks can take time)
         event.deferReply().queue();
 
         Member member = event.getMember();
@@ -27,28 +23,25 @@ public class PlayCommand {
             return;
         }
 
-        // Check if user is in a voice channel
         GuildVoiceState voiceState = member.getVoiceState();
         if (voiceState == null || !voiceState.inAudioChannel()) {
             event.getHook().sendMessageEmbeds(
-                EmbedUtils.errorEmbed("❌ No estás en un canal de voz", 
+                EmbedUtils.errorEmbed("❌ No estás en un canal de voz",
                     "Debes estar en un canal de voz para usar este comando.")
             ).queue();
             return;
         }
 
-        // Check if bot is in a different voice channel
         GuildVoiceState botVoiceState = event.getGuild().getSelfMember().getVoiceState();
-        if (botVoiceState != null && botVoiceState.inAudioChannel() && 
+        if (botVoiceState != null && botVoiceState.inAudioChannel() &&
             !botVoiceState.getChannel().equals(voiceState.getChannel())) {
             event.getHook().sendMessageEmbeds(
-                EmbedUtils.errorEmbed("❌ Bot en otro canal", 
+                EmbedUtils.errorEmbed("❌ Bot en otro canal",
                     "El bot ya está siendo usado en otro canal de voz.")
             ).queue();
             return;
         }
 
-        // Get the query parameter
         OptionMapping queryOption = event.getOption("query");
         if (queryOption == null) {
             event.getHook().sendMessageEmbeds(
@@ -61,18 +54,15 @@ public class PlayCommand {
         String query = queryOption.getAsString();
         AudioChannel audioChannel = voiceState.getChannel();
 
-        // Load and play the track
         PlayerManager.getInstance().loadAndPlay(
             event.getGuild(),
             query,
             audioChannel,
-            // Success callback
             track -> {
                 GuildMusicManager musicManager = PlayerManager.getInstance().getMusicManager(event.getGuild());
                 boolean isPlaying = musicManager.getAudioPlayer().getPlayingTrack() != null;
-                
+
                 if (isPlaying && musicManager.getTrackScheduler().getQueueSize() > 0) {
-                    // Track was added to queue
                     event.getHook().sendMessageEmbeds(
                         EmbedUtils.musicEmbed(
                             "✅ Añadido a la cola",
@@ -87,7 +77,6 @@ public class PlayCommand {
                         )
                     ).queue();
                 } else {
-                    // Track started playing immediately
                     event.getHook().sendMessageEmbeds(
                         EmbedUtils.musicEmbed(
                             "▶️ Reproduciendo ahora",
@@ -103,7 +92,6 @@ public class PlayCommand {
                     ).queue();
                 }
             },
-            // Error callback
             errorMessage -> {
                 event.getHook().sendMessageEmbeds(
                     EmbedUtils.errorEmbed("❌ Error al cargar", errorMessage)
@@ -112,9 +100,6 @@ public class PlayCommand {
         );
     }
 
-    /**
-     * Format milliseconds to MM:SS or HH:MM:SS
-     */
     private static String formatDuration(long milliseconds) {
         long seconds = milliseconds / 1000;
         long hours = seconds / 3600;

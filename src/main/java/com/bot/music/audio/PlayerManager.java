@@ -20,13 +20,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Consumer;
 
-/**
- * Singleton manager for all audio players across all guilds.
- * This is the central hub that:
- * - Creates and manages per-guild music managers
- * - Loads tracks from URLs or search queries
- * - Handles audio source configuration (YouTube, SoundCloud, etc.)
- */
 public class PlayerManager {
     private static final Logger logger = LoggerFactory.getLogger(PlayerManager.class);
     private static PlayerManager INSTANCE;
@@ -34,42 +27,26 @@ public class PlayerManager {
     private final Map<Long, GuildMusicManager> musicManagers;
     private final AudioPlayerManager audioPlayerManager;
 
-    /**
-     * Private constructor for singleton pattern
-     */
     private PlayerManager() {
         this.musicManagers = new HashMap<>();
         this.audioPlayerManager = new DefaultAudioPlayerManager();
 
-        // CRITICAL: Use Discord-compatible PCM format
-        // Discord expects: 48kHz, 16-bit, Stereo, Big Endian
-        // DISCORD_PCM_S16_BE is specifically designed for Discord (48kHz, 960 samples per frame)
         this.audioPlayerManager.getConfiguration().setOutputFormat(
             StandardAudioDataFormats.DISCORD_PCM_S16_BE
         );
-        
-        // Use MEDIUM resampling quality for good balance
-        // This will convert any input sample rate (44.1kHz, 48kHz, etc.) to 48kHz properly
-        // Prevents "chipmunk effect" when YouTube sends 44.1kHz audio
         this.audioPlayerManager.getConfiguration().setResamplingQuality(
             com.sedmelluq.discord.lavaplayer.player.AudioConfiguration.ResamplingQuality.MEDIUM
         );
 
-        // Register YouTube source with updated plugin (fixes YouTube playback issues)
-        // Using default clients - the plugin will automatically use the best available clients
         YoutubeAudioSourceManager ytSourceManager = new YoutubeAudioSourceManager();
         this.audioPlayerManager.registerSourceManager(ytSourceManager);
 
-        // Register other audio sources (SoundCloud, Bandcamp, Vimeo, Twitch, HTTP)
         AudioSourceManagers.registerRemoteSources(this.audioPlayerManager, com.sedmelluq.discord.lavaplayer.source.youtube.YoutubeAudioSourceManager.class);
         AudioSourceManagers.registerLocalSource(this.audioPlayerManager);
 
-        logger.info("PlayerManager initialized: DISCORD_PCM_S16_BE (48kHz forced), MEDIUM resampling, YouTube plugin v2");
+        logger.info("PlayerManager inicializado: DISCORD_PCM_S16_BE, remuestreo MEDIUM, plugin YouTube v2");
     }
 
-    /**
-     * Get the singleton instance
-     */
     public static synchronized PlayerManager getInstance() {
         if (INSTANCE == null) {
             INSTANCE = new PlayerManager();
@@ -77,16 +54,11 @@ public class PlayerManager {
         return INSTANCE;
     }
 
-    /**
-     * Get or create a GuildMusicManager for a specific guild
-     * @param guild The guild to get the manager for
-     * @return GuildMusicManager instance
-     */
     public synchronized GuildMusicManager getMusicManager(Guild guild) {
         return musicManagers.computeIfAbsent(guild.getIdLong(), guildId -> {
             GuildMusicManager manager = new GuildMusicManager(audioPlayerManager);
             guild.getAudioManager().setSendingHandler(manager.getSendHandler());
-            logger.info("Created new GuildMusicManager for guild: {} ({})", guild.getName(), guildId);
+            logger.info("Nuevo GuildMusicManager creado para el servidor: {} ({})", guild.getName(), guildId);
             return manager;
         });
     }

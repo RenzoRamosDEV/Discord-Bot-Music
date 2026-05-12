@@ -141,25 +141,17 @@ public class PlayerManager {
             musicManager.getAudioPlayer().destroy();
             musicManagers.remove(guild.getIdLong());
         }
-        
+
         guild.getAudioManager().closeAudioConnection();
-        logger.info("Disconnected from guild: {}", guild.getName());
+        logger.info("Desconectado del servidor: {}", guild.getName());
     }
 
-    /**
-     * Shutdown all players (called on bot shutdown)
-     */
     public void shutdown() {
-        musicManagers.values().forEach(manager -> {
-            manager.getAudioPlayer().destroy();
-        });
+        musicManagers.values().forEach(manager -> manager.getAudioPlayer().destroy());
         musicManagers.clear();
-        logger.info("PlayerManager shutdown complete");
+        logger.info("PlayerManager apagado correctamente");
     }
 
-    /**
-     * Get the AudioPlayerManager (for advanced use)
-     */
     public AudioPlayerManager getAudioPlayerManager() {
         return audioPlayerManager;
     }

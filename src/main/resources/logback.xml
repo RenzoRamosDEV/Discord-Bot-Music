@@ -3,14 +3,12 @@
     <property name="LOG_PATTERN" value="%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n"/>
     <property name="LOG_FILE" value="logs/discord-bot.log"/>
 
-    <!-- Console Appender (Colored output) -->
     <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
             <pattern>%cyan(%d{HH:mm:ss.SSS}) [%thread] %highlight(%-5level) %magenta(%logger{36}) - %msg%n</pattern>
         </encoder>
     </appender>
 
-    <!-- File Appender (Rolling) -->
     <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <file>${LOG_FILE}</file>
         <encoder>
@@ -25,18 +23,12 @@
         </rollingPolicy>
     </appender>
 
-    <!-- Root Logger -->
     <root level="${LOG_LEVEL:-INFO}">
         <appender-ref ref="CONSOLE"/>
         <appender-ref ref="FILE"/>
     </root>
 
-    <!-- JDA Logger (Reduce noise) -->
     <logger name="net.dv8tion.jda" level="INFO"/>
-    
-    <!-- LavaPlayer Logger -->
     <logger name="com.sedmelluq.discord.lavaplayer" level="INFO"/>
-    
-    <!-- HTTP Client Logger (Reduce noise) -->
     <logger name="org.apache.http" level="WARN"/>
 </configuration>

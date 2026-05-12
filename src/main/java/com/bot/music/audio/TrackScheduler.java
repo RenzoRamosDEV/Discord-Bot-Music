@@ -120,9 +120,6 @@ public class TrackScheduler extends AudioEventAdapter {
         return false;
     }
 
-    /**
-     * Shuffle the queue randomly
-     */
     public void shuffle() {
         List<AudioTrack> tempList = new ArrayList<>(queue);
         Collections.shuffle(tempList);
@@ -130,23 +127,14 @@ public class TrackScheduler extends AudioEventAdapter {
         queue.addAll(tempList);
     }
 
-    /**
-     * Get the current loop mode
-     */
     public LoopMode getLoopMode() {
         return loopMode;
     }
 
-    /**
-     * Set the loop mode
-     */
     public void setLoopMode(LoopMode mode) {
         this.loopMode = mode;
     }
 
-    /**
-     * Get the audio player
-     */
     public AudioPlayer getPlayer() {
         return player;
     }

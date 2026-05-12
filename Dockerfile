@@ -23,4 +23,4 @@ USER botuser
 HEALTHCHECK --interval=30s --timeout=10s --start-period=40s --retries=3 \
   CMD pgrep -x java || exit 1
 
-ENTRYPOINT ["java", "-Xmx512m", "-Xms256m", "-jar", "app.jar"]
+ENTRYPOINT ["java", "-Xmx768m", "-Xms256m", "-jar", "app.jar"]

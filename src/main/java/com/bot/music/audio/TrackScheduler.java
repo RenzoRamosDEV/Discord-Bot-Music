@@ -32,34 +32,21 @@ public class TrackScheduler extends AudioEventAdapter {
         QUEUE
     }
 
-    /**
-     * Constructor
-     * @param player The audio player this scheduler uses
-     */
     public TrackScheduler(AudioPlayer player) {
         this.player = player;
         this.queue = new LinkedBlockingQueue<>();
     }
 
-    /**
-     * Add a track to the queue. If nothing is playing, start immediately.
-     * @param track The track to add
-     * @return true if added to queue, false if started immediately
-     */
     public boolean queue(AudioTrack track) {
-        logger.debug("Attempting to queue track: {}", track.getInfo().title);
+        logger.debug("Intentando encolar pista: {}", track.getInfo().title);
         boolean started = player.startTrack(track, true);
-        
         if (!started) {
-            // Track didn't start immediately, add to queue
             queue.offer(track);
-            logger.debug("Track added to queue (position: {})", queue.size());
+            logger.debug("Pista agregada a la cola (posición: {})", queue.size());
             return true;
-        } else {
-            // Track started playing immediately
-            logger.debug("Track started playing immediately");
-            return false;
         }
+        logger.debug("Pista iniciada inmediatamente");
+        return false;
     }
 
     /**

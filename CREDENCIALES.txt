@@ -1,0 +1,32 @@
+============================================================
+   CREDENCIALES DEL BOT - REFERENCIA RAPIDA
+============================================================
+
+Application ID:
+1478112402775081192
+
+Public Key:
+f4837ba27c3a1f3486484c9dc466f7426fec6bbfa8836e77e986de9028e4d37
+
+------------------------------------------------------------
+
+URL DE INVITACION (con permisos completos):
+
+https://discord.com/api/oauth2/authorize?client_id=1478112402775081192&permissions=3165184&scope=bot%20applications.commands
+
+------------------------------------------------------------
+
+PERMISOS INCLUIDOS:
+- Ver canales (1024)
+- Enviar mensajes (2048)
+- Insertar enlaces (16384)
+- Conectar a voz (1048576)
+- Hablar en voz (2097152)
+
+Total: 3165184
+
+------------------------------------------------------------
+
+NOTA: Tu token esta en el archivo .env (NO COMPARTIR)
+
+============================================================

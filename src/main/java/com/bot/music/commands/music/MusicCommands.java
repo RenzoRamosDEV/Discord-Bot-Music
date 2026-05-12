@@ -8,14 +8,8 @@ import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEve
 
 import java.util.List;
 
-/**
- * Music command utilities and implementations for skip, stop, queue, etc.
- */
 public class MusicCommands {
 
-    /**
-     * /skip - Skip to next track
-     */
     public static void skip(SlashCommandInteractionEvent event) {
         if (!checkVoiceState(event)) return;
 
@@ -48,9 +42,6 @@ public class MusicCommands {
         }
     }
 
-    /**
-     * /stop - Stop playback and clear queue
-     */
     public static void stop(SlashCommandInteractionEvent event) {
         if (!checkVoiceState(event)) return;
 
@@ -81,8 +72,7 @@ public class MusicCommands {
         }
 
         StringBuilder description = new StringBuilder();
-        
-        // Current track
+
         if (currentTrack != null) {
             description.append("**▶️ Reproduciendo:**\n")
                       .append(String.format("[%s](%s) - `%s`\n\n",
@@ -91,11 +81,10 @@ public class MusicCommands {
                                           formatDuration(currentTrack.getDuration())));
         }
 
-        // Queue
         if (!queue.isEmpty()) {
             description.append("**📋 Próximas canciones:**\n");
             int maxDisplay = Math.min(queue.size(), 10);
-            
+
             for (int i = 0; i < maxDisplay; i++) {
                 AudioTrack track = queue.get(i);
                 description.append(String.format("`%d.` [%s](%s) - `%s`\n",
@@ -119,9 +108,6 @@ public class MusicCommands {
         ).queue();
     }
 
-    /**
-     * /nowplaying - Display currently playing track
-     */
     public static void nowPlaying(SlashCommandInteractionEvent event) {
         if (!checkVoiceState(event)) return;
 

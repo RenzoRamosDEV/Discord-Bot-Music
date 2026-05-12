@@ -9,14 +9,8 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
 
-/**
- * Info commands: /info, /me, /connect
- */
 public class InfoCommands {
 
-    /**
-     * /info - Display server information
-     */
     public static void info(SlashCommandInteractionEvent event) {
         Guild guild = event.getGuild();
         if (guild == null) {
@@ -28,7 +22,7 @@ public class InfoCommands {
 
         Member owner = guild.getOwner();
         String ownerTag = owner != null ? owner.getUser().getAsTag() : "Desconocido";
-        
+
         String creationDate = guild.getTimeCreated()
             .format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"));
 
@@ -83,7 +77,6 @@ public class InfoCommands {
         String creationDate = user.getTimeCreated()
             .format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"));
 
-        // Get roles (excluding @everyone)
         List<Role> roles = member.getRoles();
         String rolesStr = roles.isEmpty() ? "Sin roles" : 
             roles.stream()
@@ -117,9 +110,6 @@ public class InfoCommands {
         ).queue();
     }
 
-    /**
-     * /connect - Display users in voice channel
-     */
     public static void connect(SlashCommandInteractionEvent event) {
         Member member = event.getMember();
         if (member == null || member.getVoiceState() == null || 
@@ -175,15 +165,12 @@ public class InfoCommands {
         ).queue();
     }
 
-    /**
-     * /ping - Display bot latency
-     */
     public static void ping(SlashCommandInteractionEvent event) {
         long gatewayPing = event.getJDA().getGatewayPing();
-        
+
         event.deferReply().queue(hook -> {
             long responseTime = System.currentTimeMillis() - event.getTimeCreated().toInstant().toEpochMilli();
-            
+
             String description = String.format(
                 "🏓 **Pong!**\n\n" +
                 "⏱️ **Latencia de respuesta:** `%dms`\n" +
@@ -198,9 +185,6 @@ public class InfoCommands {
         });
     }
 
-    /**
-     * /help - Display all commands
-     */
     public static void help(SlashCommandInteractionEvent event) {
         String description = 
             "**🎵 Comandos de Música**\n" +

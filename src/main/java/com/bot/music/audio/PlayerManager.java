@@ -75,10 +75,8 @@ public class PlayerManager {
                            Consumer<AudioTrack> onSuccess, Consumer<String> onError) {
         GuildMusicManager musicManager = getMusicManager(guild);
         
-        // Connect to voice channel if not connected
         connectToVoiceChannel(guild.getAudioManager(), channel);
 
-        // If not a URL, treat as search query
         String finalUrl = trackUrl;
         if (!trackUrl.startsWith("http://") && !trackUrl.startsWith("https://")) {
             finalUrl = "ytsearch:" + trackUrl;
@@ -91,29 +89,24 @@ public class PlayerManager {
                 onSuccess.accept(track);
                 
                 if (wasQueued) {
-                    logger.info("Added to queue: {} in guild {}", track.getInfo().title, guild.getName());
+                    logger.info("Agregado a la cola: {} en servidor {}", track.getInfo().title, guild.getName());
                 } else {
-                    logger.info("Now playing: {} in guild {}", track.getInfo().title, guild.getName());
+                    logger.info("Reproduciendo ahora: {} en servidor {}", track.getInfo().title, guild.getName());
                 }
             }
 
             @Override
             public void playlistLoaded(AudioPlaylist playlist) {
                 if (playlist.isSearchResult()) {
-                    // For search results, play the first track
                     AudioTrack firstTrack = playlist.getTracks().get(0);
                     musicManager.getTrackScheduler().queue(firstTrack);
                     onSuccess.accept(firstTrack);
-                    logger.info("Playing search result: {}", firstTrack.getInfo().title);
+                    logger.info("Reproduciendo resultado de búsqueda: {}", firstTrack.getInfo().title);
                 } else {
-                    // For actual playlists, add all tracks
-                    int addedCount = 0;
                     for (AudioTrack track : playlist.getTracks()) {
                         musicManager.getTrackScheduler().queue(track);
-                        addedCount++;
                     }
-                    logger.info("Added {} tracks from playlist: {}", addedCount, playlist.getName());
-                    
+                    logger.info("Agregadas {} pistas de la lista: {}", playlist.getTracks().size(), playlist.getName());
                     if (!playlist.getTracks().isEmpty()) {
                         onSuccess.accept(playlist.getTracks().get(0));
                     }
@@ -123,30 +116,24 @@ public class PlayerManager {
             @Override
             public void noMatches() {
                 onError.accept("No se encontraron resultados para: " + trackUrl);
-                logger.warn("No matches found for: {}", trackUrl);
+                logger.warn("Sin resultados para: {}", trackUrl);
             }
 
             @Override
             public void loadFailed(FriendlyException exception) {
                 onError.accept("Error al cargar: " + exception.getMessage());
-                logger.error("Failed to load track: {}", trackUrl, exception);
+                logger.error("Error al cargar la pista: {}", trackUrl, exception);
             }
         });
     }
 
-    /**
-     * Connect the bot to a voice channel
-     */
     private void connectToVoiceChannel(AudioManager audioManager, AudioChannel channel) {
         if (!audioManager.isConnected()) {
             audioManager.openAudioConnection(channel);
-            logger.info("Connected to voice channel: {}", channel.getName());
+            logger.info("Conectado al canal de voz: {}", channel.getName());
         }
     }
 
-    /**
-     * Disconnect from voice channel and cleanup
-     */
     public void disconnect(Guild guild) {
         GuildMusicManager musicManager = musicManagers.get(guild.getIdLong());
         if (musicManager != null) {

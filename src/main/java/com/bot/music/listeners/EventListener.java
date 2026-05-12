@@ -15,36 +15,25 @@ import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-/**
- * Central event listener for all Discord events.
- * Routes slash commands to their respective handlers.
- */
 public class EventListener extends ListenerAdapter {
     private static final Logger logger = LoggerFactory.getLogger(EventListener.class);
 
-    /**
-     * Called when the bot is ready and connected
-     */
     @Override
     public void onReady(@NotNull ReadyEvent event) {
-        logger.info("Bot is ready! Logged in as: {}", event.getJDA().getSelfUser().getAsTag());
-        logger.info("Bot is in {} guilds", event.getJDA().getGuilds().size());
+        logger.info("Bot listo! Conectado como: {}", event.getJDA().getSelfUser().getAsTag());
+        logger.info("El bot está en {} servidores", event.getJDA().getGuilds().size());
     }
 
-    /**
-     * Called when a slash command is executed
-     */
     @Override
     public void onSlashCommandInteraction(@NotNull SlashCommandInteractionEvent event) {
         String commandName = event.getName();
-        logger.info("Command '{}' executed by {} in guild {}", 
-                   commandName, 
-                   event.getUser().getAsTag(), 
+        logger.info("Comando '{}' ejecutado por {} en el servidor {}",
+                   commandName,
+                   event.getUser().getAsTag(),
                    event.getGuild() != null ? event.getGuild().getName() : "DM");
 
         try {
             switch (commandName.toLowerCase()) {
-                // ========== MUSIC COMMANDS ==========
                 case "play" -> PlayCommand.execute(event);
                 case "skip" -> MusicCommands.skip(event);
                 case "stop" -> MusicCommands.stop(event);
@@ -69,30 +58,24 @@ public class EventListener extends ListenerAdapter {
                 default -> event.reply("Comando no reconocido.").setEphemeral(true).queue();
             }
         } catch (Exception e) {
-            logger.error("Error executing command: {}", commandName, e);
-            
-            // Try to send error message to user
+            logger.error("Error ejecutando el comando: {}", commandName, e);
             try {
                 if (event.isAcknowledged()) {
                     event.getHook().sendMessageEmbeds(
-                        EmbedUtils.errorEmbed("❌ Error", 
+                        EmbedUtils.errorEmbed("❌ Error",
                             "Ocurrió un error al ejecutar el comando. Por favor, inténtalo de nuevo.")
                     ).queue();
                 } else {
                     event.replyEmbeds(
-                        EmbedUtils.errorEmbed("❌ Error", 
+                        EmbedUtils.errorEmbed("❌ Error",
                             "Ocurrió un error al ejecutar el comando. Por favor, inténtalo de nuevo.")
                     ).setEphemeral(true).queue();
                 }
             } catch (Exception ignored) {
-                // If we can't send error message, just log it
             }
         }
     }
 
-    /**
-     * Handle /loop command
-     */
     private void handleLoop(SlashCommandInteractionEvent event) {
         if (!checkVoiceState(event)) return;
 
@@ -101,7 +84,6 @@ public class EventListener extends ListenerAdapter {
 
         TrackScheduler.LoopMode newMode;
         if (modeOption == null) {
-            // Toggle through modes: OFF -> TRACK -> QUEUE -> OFF
             TrackScheduler.LoopMode currentMode = musicManager.getTrackScheduler().getLoopMode();
             newMode = switch (currentMode) {
                 case OFF -> TrackScheduler.LoopMode.TRACK;

@@ -112,10 +112,6 @@ LOG_LEVEL=INFO
 
 ## Ejecución
 
-### Con el script de Windows
-
-Haz doble clic en `EJECUTAR BOT.bat` y selecciona una opción del menú.
-
 ### Con Maven
 
 ```bash

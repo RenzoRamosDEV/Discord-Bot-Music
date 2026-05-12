@@ -117,9 +117,6 @@ public class EventListener extends ListenerAdapter {
         ).queue();
     }
 
-    /**
-     * Handle /volume command
-     */
     private void handleVolume(SlashCommandInteractionEvent event) {
         if (!checkVoiceState(event)) return;
 
@@ -145,9 +142,6 @@ public class EventListener extends ListenerAdapter {
         ).queue();
     }
 
-    /**
-     * Handle /seek command
-     */
     private void handleSeek(SlashCommandInteractionEvent event) {
         if (!checkVoiceState(event)) return;
 
@@ -208,9 +202,6 @@ public class EventListener extends ListenerAdapter {
         }
     }
 
-    /**
-     * Handle /remove command
-     */
     private void handleRemove(SlashCommandInteractionEvent event) {
         if (!checkVoiceState(event)) return;
 
@@ -222,7 +213,7 @@ public class EventListener extends ListenerAdapter {
             return;
         }
 
-        int position = (int) positionOption.getAsLong() - 1; // Convert to 0-indexed
+        int position = (int) positionOption.getAsLong() - 1;
 
         GuildMusicManager musicManager = PlayerManager.getInstance().getMusicManager(event.getGuild());
         
@@ -243,9 +234,6 @@ public class EventListener extends ListenerAdapter {
         }
     }
 
-    /**
-     * Helper: Check if user is in voice channel
-     */
     private boolean checkVoiceState(SlashCommandInteractionEvent event) {
         if (event.getMember() == null || event.getMember().getVoiceState() == null || 
             !event.getMember().getVoiceState().inAudioChannel()) {

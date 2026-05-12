@@ -8,30 +8,23 @@ services:
     container_name: discord-music-bot
     restart: unless-stopped
     
-    # Environment variables (use .env file)
     env_file:
       - .env
-    
-    # Resource limits (adjust based on your needs)
+
     deploy:
       resources:
         limits:
           cpus: '1.0'
-          memory: 512M
+          memory: 768M
         reservations:
           cpus: '0.5'
           memory: 256M
-    
-    # Volumes for persistent logs
+
     volumes:
       - ./logs:/app/logs
-    
-    # Logging configuration
+
     logging:
       driver: "json-file"
       options:
         max-size: "10m"
         max-file: "3"
-    
-    # Network mode (optional, use host for better voice quality)
-    # network_mode: host

@@ -27,9 +27,9 @@ public class TrackScheduler extends AudioEventAdapter {
     private AudioTrack lastTrack = null;
 
     public enum LoopMode {
-        OFF,      // No repeat
-        TRACK,    // Repeat current track
-        QUEUE     // Repeat entire queue
+        OFF,
+        TRACK,
+        QUEUE
     }
 
     /**

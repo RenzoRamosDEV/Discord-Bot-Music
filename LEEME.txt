@@ -1,0 +1,93 @@
+============================================================
+   BOT DE MUSICA PARA DISCORD - GUIA RAPIDA
+============================================================
+
+PASO 1: CONFIGURAR TOKEN
+------------------------------------------------------------
+
+   1. Ve al Discord Developer Portal:
+      https://discord.com/developers
+   
+   2. Crea una aplicacion o usa una existente
+   
+   3. Copia el TOKEN del bot
+   
+   4. Abre el archivo ".env" y pega tu token
+
+
+PASO 2: EJECUTAR
+------------------------------------------------------------
+
+   Haz doble clic en:
+   
+   >>> EJECUTAR BOT.bat <<<
+   
+   Selecciona:
+   [1] Ejecutar Bot       - Si ya compilaste antes
+   [2] Recompilar         - Primera vez o despues de cambios
+   [3] Ver Logs           - Para ver errores
+   [4] Salir
+
+
+COMANDOS EN DISCORD
+------------------------------------------------------------
+
+   /play <cancion>        - Reproducir musica
+   /stop                  - Detener y desconectar
+   /pause                 - Pausar
+   /resume                - Reanudar
+   /skip                  - Siguiente cancion
+   /queue                 - Ver cola
+   /nowplaying            - Cancion actual
+   /volume <0-150>        - Ajustar volumen
+   /shuffle               - Mezclar cola
+   /loop <off|track|queue> - Modo repeticion
+   /clear                 - Limpiar cola
+
+
+PERMISOS DEL BOT
+------------------------------------------------------------
+
+   URL para invitar con permisos correctos:
+   
+   https://discord.com/api/oauth2/authorize?client_id=1478112402775081192&permissions=3165184&scope=bot%20applications.commands
+   
+   Application ID: 1478112402775081192
+   
+   El bot NECESITA:
+   [OK] Ver canales
+   [OK] Enviar mensajes  
+   [OK] Conectar (voz)
+   [OK] Hablar (voz)
+
+
+SOLUCION DE PROBLEMAS
+------------------------------------------------------------
+
+   [X] Bot no reproduce audio:
+      -> Verifica permisos "Conectar" y "Hablar"
+      -> Usa /volume 100 para subir volumen
+      -> Revisa logs con opcion [3] del menu
+   
+   [X] Comandos no aparecen:
+      -> Reinvita el bot con la URL de arriba
+      -> Espera 1-2 minutos
+      -> Refresca Discord (Ctrl+R)
+   
+   [X] Error al compilar:
+      -> Verifica que Java 17 esta instalado
+      -> Cierra el bot antes de recompilar
+
+
+ARCHIVOS IMPORTANTES
+------------------------------------------------------------
+
+   .env                   - Tu token (NO COMPARTIR)
+   EJECUTAR BOT.bat       - Script principal
+   logs\discord-bot.log   - Logs de errores
+   target\*.jar           - Bot compilado
+
+
+============================================================
+              Disfruta tu bot de musica!
+============================================================

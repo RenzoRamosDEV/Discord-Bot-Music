@@ -82,58 +82,36 @@ public class TrackScheduler extends AudioEventAdapter {
                    track.getInfo().title, track.getDuration(), player.getVolume());
     }
     
-    /**
-     * Called when a track throws an exception
-     */
     @Override
     public void onTrackException(AudioPlayer player, AudioTrack track, FriendlyException exception) {
-        logger.error("❌ Track exception for '{}': {}", track.getInfo().title, exception.getMessage(), exception);
-    }
-    
-    /**
-     * Called when a track gets stuck
-     */
-    @Override
-    public void onTrackStuck(AudioPlayer player, AudioTrack track, long thresholdMs) {
-        logger.warn("⚠️ Track stuck: {} (threshold: {}ms)", track.getInfo().title, thresholdMs);
+        logger.error("Error en la pista '{}': {}", track.getInfo().title, exception.getMessage(), exception);
     }
 
-    /**
-     * Get the current queue as a list (for display)
-     * @return List of tracks in queue
-     */
+    @Override
+    public void onTrackStuck(AudioPlayer player, AudioTrack track, long thresholdMs) {
+        logger.warn("Pista atascada: {} (umbral: {}ms)", track.getInfo().title, thresholdMs);
+    }
+
     public List<AudioTrack> getQueue() {
         return new ArrayList<>(queue);
     }
 
-    /**
-     * Get the size of the queue
-     * @return Number of tracks in queue
-     */
     public int getQueueSize() {
         return queue.size();
     }
 
-    /**
-     * Clear the entire queue
-     */
     public void clearQueue() {
         queue.clear();
     }
 
-    /**
-     * Remove a specific track from the queue by position
-     * @param position Position in queue (0-indexed)
-     * @return true if removed successfully
-     */
     public boolean removeTrack(int position) {
         if (position < 0 || position >= queue.size()) {
             return false;
         }
-        
+
         List<AudioTrack> tempList = new ArrayList<>(queue);
         AudioTrack removed = tempList.remove(position);
-        
+
         if (removed != null) {
             queue.clear();
             queue.addAll(tempList);

@@ -63,31 +63,22 @@ public class TrackScheduler extends AudioEventAdapter {
         }
     }
 
-    /**
-     * Called when a track ends
-     */
     @Override
     public void onTrackEnd(AudioPlayer player, AudioTrack track, AudioTrackEndReason endReason) {
         this.lastTrack = track;
 
-        // Only start next track if the end reason is suitable for it (FINISHED or LOAD_FAILED)
         if (endReason.mayStartNext) {
             if (loopMode == LoopMode.TRACK) {
-                // Repeat the same track
                 player.startTrack(track.makeClone(), false);
             } else {
-                // Play next track in queue
                 nextTrack();
             }
         }
     }
 
-    /**
-     * Called when a track starts
-     */
     @Override
     public void onTrackStart(AudioPlayer player, AudioTrack track) {
-        logger.info("🎵 Track started: {} | Duration: {}ms | Volume: {}", 
+        logger.info("Pista iniciada: {} | Duración: {}ms | Volumen: {}",
                    track.getInfo().title, track.getDuration(), player.getVolume());
     }
     

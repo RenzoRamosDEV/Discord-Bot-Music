@@ -149,14 +149,11 @@ public class MusicCommands {
         ).queue();
     }
 
-    /**
-     * /pause - Pause playback
-     */
     public static void pause(SlashCommandInteractionEvent event) {
         if (!checkVoiceState(event)) return;
 
         GuildMusicManager musicManager = PlayerManager.getInstance().getMusicManager(event.getGuild());
-        
+
         if (musicManager.getAudioPlayer().getPlayingTrack() == null) {
             event.replyEmbeds(
                 EmbedUtils.errorEmbed("❌ No hay música", "No hay nada que pausar.")
@@ -177,14 +174,11 @@ public class MusicCommands {
         ).queue();
     }
 
-    /**
-     * /resume - Resume playback
-     */
     public static void resume(SlashCommandInteractionEvent event) {
         if (!checkVoiceState(event)) return;
 
         GuildMusicManager musicManager = PlayerManager.getInstance().getMusicManager(event.getGuild());
-        
+
         if (musicManager.getAudioPlayer().getPlayingTrack() == null) {
             event.replyEmbeds(
                 EmbedUtils.errorEmbed("❌ No hay música", "No hay nada que reanudar.")
@@ -205,14 +199,11 @@ public class MusicCommands {
         ).queue();
     }
 
-    /**
-     * /shuffle - Shuffle the queue
-     */
     public static void shuffle(SlashCommandInteractionEvent event) {
         if (!checkVoiceState(event)) return;
 
         GuildMusicManager musicManager = PlayerManager.getInstance().getMusicManager(event.getGuild());
-        
+
         if (musicManager.getTrackScheduler().getQueueSize() < 2) {
             event.replyEmbeds(
                 EmbedUtils.errorEmbed("❌ Cola muy pequeña", 
@@ -237,7 +228,7 @@ public class MusicCommands {
 
         GuildMusicManager musicManager = PlayerManager.getInstance().getMusicManager(event.getGuild());
         int queueSize = musicManager.getTrackScheduler().getQueueSize();
-        
+
         if (queueSize == 0) {
             event.replyEmbeds(
                 EmbedUtils.errorEmbed("❌ Cola vacía", "No hay canciones en la cola para limpiar.")
@@ -252,9 +243,6 @@ public class MusicCommands {
         ).queue();
     }
 
-    /**
-     * Helper: Check if user and bot are in voice channel
-     */
     private static boolean checkVoiceState(SlashCommandInteractionEvent event) {
         if (event.getMember() == null || event.getMember().getVoiceState() == null || 
             !event.getMember().getVoiceState().inAudioChannel()) {
@@ -267,9 +255,6 @@ public class MusicCommands {
         return true;
     }
 
-    /**
-     * Format duration helper
-     */
     private static String formatDuration(long milliseconds) {
         long seconds = milliseconds / 1000;
         long hours = seconds / 3600;
